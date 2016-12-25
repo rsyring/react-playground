@@ -1,5 +1,5 @@
 {
-  "name": "todombc-mobx-src",
+  "name": "todomvc-mobx-src",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
