@@ -1,4 +1,5 @@
 import React from 'react';
+import {observer} from "mobx-react";
 import './TempCalc.sass';
 
 const scaleNames = {
@@ -8,12 +9,7 @@ const scaleNames = {
 
 
 class TemperatureInput extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-    }
-
-    handleChange(e) {
+    handleChange = (e) => {
         this.props.onChange(e.target.value);
     }
 
@@ -29,6 +25,7 @@ class TemperatureInput extends React.Component {
     }
 }
 
+
 function BoilingVerdict(props) {
   if (props.celsius >= 100) {
     return <p>The water would boil.</p>;
@@ -36,57 +33,48 @@ function BoilingVerdict(props) {
   return <p>The water would not boil.</p>;
 }
 
-function toCelsius(fahrenheit) {
-    return (fahrenheit - 32) * 5 / 9;
-}
 
-function toFahrenheit(celsius) {
-    return (celsius * 9 / 5) + 32;
-}
-
-function tryConvert(value, convert) {
-    const input = parseFloat(value);
-    if (Number.isNaN(input)) {
+function displayNumber(value) {
+    if (Number.isNaN(value)) {
         return '';
     }
-    const output = convert(input);
-    const rounded = Math.round(output * 1000) / 1000;
+    const rounded = Math.round(value * 1000) / 1000;
     return rounded.toString();
 }
 
 
-
+@observer
 export default class TempCalc extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
-        this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
-        this.state = {value: '', scale: 'c'};
+
+    handleCelsiusChange = (value) => {
+        this.props.store.tempChange(value, 'c');
     }
 
-    handleCelsiusChange(value) {
-        this.setState({scale: 'c', value});
+    handleFahrenheitChange = (value) => {
+        this.props.store.tempChange(value, 'f');
     }
-
-    handleFahrenheitChange(value) {
-        this.setState({scale: 'f', value});
-    }
-
 
     render() {
-        const scale = this.state.scale;
-        const value = this.state.value;
-        const celsius = scale === 'f' ? tryConvert(value, toCelsius) : value;
-        const fahrenheit = scale === 'c' ? tryConvert(value, toFahrenheit) : value;
-
+        const store = this.props.store;
+        if( store.scale === 'c') {
+            // Display exactly what the user typed
+            var cDisplay = store.celcius.toString();
+            // Format the display as the value is based on a conversion
+            var fDisplay = displayNumber(store.fahrenheit);
+        } else {
+            // Format the display as the value is based on a conversion
+            var cDisplay = displayNumber(store.celcius);
+            // Display exactly what the user typed
+            var fDisplay = store.fahrenheit.toString();
+        }
         return (
             <div className="tempcalc">
                 <fieldset>
                     <legend>Enter temperature:</legend>
-                        <TemperatureInput scale="c" onChange={this.handleCelsiusChange} value={celsius} />
-                        <TemperatureInput scale="f" onChange={this.handleFahrenheitChange} value={fahrenheit} />
+                        <TemperatureInput scale="c" onChange={this.handleCelsiusChange} value={cDisplay} />
+                        <TemperatureInput scale="f" onChange={this.handleFahrenheitChange} value={fDisplay} />
                 </fieldset>
-                <BoilingVerdict celsius={parseFloat(value)} />
+                <BoilingVerdict celsius={store.celcius} />
             </div>
         );
     }

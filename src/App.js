@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import Clock from './components/Clock.js'
-import TempCalc from './components/TempCalc.js'
 import ClockStore from './stores/ClockStore.js'
+import TempCalc from './components/TempCalc.js'
+import TempCalcStore from './stores/TempCalcStore.js'
+
 //styles
 //import './App.less';
 //import './App.scss';
@@ -15,7 +17,7 @@ class App extends Component {
                 <h2>Just a title</h2>
                 <Clock clockStore={new ClockStore()} />
                 <hr />
-                <TempCalc />
+                <TempCalc store={new TempCalcStore()} />
             </div>
         )
     }
