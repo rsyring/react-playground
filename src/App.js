@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Clock from './components/Clock.js'
+import TempCalc from './components/TempCalc.js'
 import ClockStore from './stores/ClockStore.js'
 //styles
 //import './App.less';
@@ -8,14 +9,16 @@ import ClockStore from './stores/ClockStore.js'
 //import styles from './Modules.css';
 
 class App extends Component {
-  render() {
-    return (
-      <div id="app">
-        <h2>Just a title</h2>
-        <Clock clockStore={new ClockStore()} />
-      </div>
-    )
-  }
+    render() {
+        return (
+            <div id="app">
+                <h2>Just a title</h2>
+                <Clock clockStore={new ClockStore()} />
+                <hr />
+                <TempCalc />
+            </div>
+        )
+    }
 }
 
 export default App;

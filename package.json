@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "custom-react-scripts": "0.0.21"
+    "custom-react-scripts": "0.0.21",
+    "sass-lint": "^1.10.2"
   },
   "dependencies": {
     "mobx": "^2.7.0",
